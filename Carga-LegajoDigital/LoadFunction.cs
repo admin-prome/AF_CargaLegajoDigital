@@ -20,6 +20,7 @@ namespace Carga_LegajoDigital
                 LDRecordForInsert record = new LDRecordForInsert();
                 BusinessLD.ExecuteProccess(LDService, record);
                 */
+                Console.WriteLine("Hola");
                 log.LogInformation("Se ejecutó correctamente");
 
             }
