@@ -21,7 +21,7 @@ namespace Carga_LegajoDigital
                 BusinessLD.ExecuteProccess(LDService, record);
                 */
                 Console.WriteLine("Hola");
-                log.LogInformation("Se ejecutó correctamente");
+                log.LogInformation("Se ejecutó correctamente, hola Johnny");
 
             }
             catch (Exception e)
