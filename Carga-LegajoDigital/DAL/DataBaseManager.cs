@@ -56,7 +56,7 @@ namespace LegajoDigitalDemoApp.DAL
             {
                 Console.WriteLine("Insertando "+ recordForInsert.NIF);
                 var records = new DataTable();
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["connStringDestino"]))
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["216"]))
                 {
                     connection.Open();
                     SqlCommand Cmd = new SqlCommand("Insert_in_LD_Tabla_Destino", connection);
