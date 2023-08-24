@@ -11,7 +11,7 @@ namespace Carga_LegajoDigital
     public class LoadFunction
     {
         [FunctionName("LoadFunction")]
-        public void Run([TimerTrigger("0 37 18 * * *")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 59 18 * * *")]TimerInfo myTimer, ILogger log)
         {
             try
             {
