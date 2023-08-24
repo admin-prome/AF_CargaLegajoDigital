@@ -10,7 +10,7 @@ namespace LegajoDigitalApp.Model
         public LDRecordForInsert() 
         {
             this.fechaConsulta = GenerarFechaDeConsulta();
-            this.apiDavoServiceResponse = new APIDavoServiceResponse();
+            this.apiDavoServiceResponse = new LDServiceResponse();
         }
 
         private string GenerarFechaDeConsulta()
@@ -21,7 +21,7 @@ namespace LegajoDigitalApp.Model
 
 
 
-        internal LDRecordForInsert AdjuntarDatosDeRegistro(APIDavoServiceResponse result, string nif)
+        internal LDRecordForInsert AdjuntarDatosDeRegistro(LDServiceResponse result, string nif)
         {
             this.NIF = nif;
             this.apiDavoServiceResponse.bp730 = result.bp730;
@@ -38,6 +38,6 @@ namespace LegajoDigitalApp.Model
 
         public string fechaConsulta { get; set; }
 
-        public APIDavoServiceResponse apiDavoServiceResponse {get;set;}
+        public LDServiceResponse apiDavoServiceResponse {get;set;}
     }
 }

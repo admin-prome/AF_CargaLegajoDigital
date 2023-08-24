@@ -27,7 +27,7 @@ namespace LegajoDigitalDemoApp.Service
                 HttpResponseMessage ApiResponse = await client.GetAsync(this.baseUrl + nif);
                 ApiResponse.EnsureSuccessStatusCode();
                 string responseBody = await ApiResponse.Content.ReadAsStringAsync();
-                APIDavoServiceResponse ApiPokemonResponse = JsonConvert.DeserializeObject<APIDavoServiceResponse>(responseBody);
+                LDServiceResponse ApiPokemonResponse = JsonConvert.DeserializeObject<LDServiceResponse>(responseBody);
                 ServiceResponse serviceResponse = GenerateResponse(ApiPokemonResponse);
                 return serviceResponse;
             }
@@ -51,7 +51,7 @@ namespace LegajoDigitalDemoApp.Service
             return res;
         }
 
-        private ServiceResponse GenerateResponse(APIDavoServiceResponse apiPokemonResponse)
+        private ServiceResponse GenerateResponse(LDServiceResponse apiPokemonResponse)
         {
             ServiceResponse res = new ServiceResponse();
             res.Result = apiPokemonResponse;

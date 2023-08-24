@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LegajoDigitalDemoApp.Model
 {
-    internal class APIDavoServiceResponse
+    internal class LDServiceResponse
     {
 
         

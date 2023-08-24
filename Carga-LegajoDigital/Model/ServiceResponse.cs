@@ -12,7 +12,7 @@ namespace LegajoDigitalDemoApp.Model
 
         public List<string> ErrorMessages { get; set; }
 
-        public APIDavoServiceResponse Result { get; set; }
+        public LDServiceResponse Result { get; set; }
 
         
     }
