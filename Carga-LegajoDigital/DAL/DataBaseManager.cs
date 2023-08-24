@@ -32,7 +32,7 @@ namespace LegajoDigitalDemoApp.DAL
             try 
             {
                 var records = new DataTable();
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["216"]))
+                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     connection.Open();
                     SqlCommand Cmd = new SqlCommand("GetNewNifs", connection);
@@ -56,7 +56,7 @@ namespace LegajoDigitalDemoApp.DAL
             {
                 Console.WriteLine("Insertando "+ recordForInsert.NIF);
                 var records = new DataTable();
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["216"]))
+                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     connection.Open();
                     SqlCommand Cmd = new SqlCommand("Insert_in_LD_Tabla_Destino", connection);
@@ -87,7 +87,7 @@ namespace LegajoDigitalDemoApp.DAL
             try
             {
                 var records = new DataTable();
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["216"]))
+                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     connection.Open();
                     SqlCommand Cmd = new SqlCommand("GetUpdateNifs", connection);
@@ -108,7 +108,7 @@ namespace LegajoDigitalDemoApp.DAL
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["216"]))
+                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     connection.Open();
                     SqlCommand Cmd = new SqlCommand("Update_LD_Tabla_Destino", connection);

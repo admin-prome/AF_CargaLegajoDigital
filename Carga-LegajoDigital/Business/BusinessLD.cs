@@ -26,7 +26,7 @@ namespace LegajoDigitalApp.Business
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["your_connection_string"]))
+                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     connection.Open();
                     SqlCommand cmd = new SqlCommand("UpdateLDRecordsState", connection);
