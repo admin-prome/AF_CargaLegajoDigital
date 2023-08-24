@@ -11,11 +11,12 @@ namespace Carga_LegajoDigital
     public class LoadFunction
     {
         [FunctionName("LoadFunction")]
-        public void Run([TimerTrigger("0 59 18 * * *")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 04 19 * * *")]TimerInfo myTimer, ILogger log)
         {
             try
             {
                 /**/
+                log.LogInformation("Entrando");
                 ServiceLD LDService = new ServiceLD();
                 BusinessLD.ExecuteProccess(LDService);
                 log.LogInformation("Se ejecutó correctamente");
