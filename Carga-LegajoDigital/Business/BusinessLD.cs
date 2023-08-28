@@ -74,7 +74,7 @@ namespace LegajoDigitalApp.Business
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
 
-                string nif = nifs.Rows[i].Field<string>(0);
+                string nif = nifs.Rows[i].Field<Int64>(0).ToString();
 
                 ServiceResponse result = await ldService.GetResponseFromService(nif);
                 if (result.IsSuccess)
