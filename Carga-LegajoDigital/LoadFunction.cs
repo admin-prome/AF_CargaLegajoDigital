@@ -18,7 +18,7 @@ namespace Carga_LegajoDigital
                 /**/
                 log.LogInformation("Entrando");
                 ServiceLD LDService = new ServiceLD();
-                BusinessLD.ExecuteProccess(LDService);
+                BusinessLD.ExecuteProccess(LDService,log);
                 log.LogInformation("Se ejecutó correctamente");
 
             }

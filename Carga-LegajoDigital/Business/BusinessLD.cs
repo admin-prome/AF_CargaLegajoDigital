@@ -3,6 +3,8 @@ using LegajoDigitalDemoApp.DAL;
 //using LegajoDigitalDemoApp.Log;
 using LegajoDigitalDemoApp.Model;
 using LegajoDigitalDemoApp.Service;
+using Microsoft.Azure.WebJobs.Logging;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,11 +16,11 @@ namespace LegajoDigitalApp.Business
 {
     internal class BusinessLD
     {
-        internal async static void ExecuteProccess(ServiceLD ldService)
+        internal async static void ExecuteProccess(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
         {
            
-            InsertNewRecords(ldService);
-            UpdateRecords(ldService);
+            InsertNewRecords(ldService,log);
+            UpdateRecords(ldService,log);
             UpdateRecordsState();
         }
 
@@ -41,13 +43,13 @@ namespace LegajoDigitalApp.Business
 
         }
 
-        private static async void UpdateRecords(ServiceLD ldService)
+        private static async void UpdateRecords(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
         {
             DataTable nifs = DataBaseManager.GetNIFSFromUpdateSourceTable();
-
+            int fallaServicioCounter = 0;
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
-
+                
                 string nif = nifs.Rows[i].Field<string>(0);
 
                 ServiceResponse result = await ldService.GetResponseFromService(nif);
@@ -60,17 +62,22 @@ namespace LegajoDigitalApp.Business
                 }
                 else
                 {
-                    throw new Exception("Falla en servicio de Legajo Digital del Banco");
+                    fallaServicioCounter++;
                 }
 
             }
+            if (fallaServicioCounter > 0) 
+            {
+                log.LogInformation("Error en servicio de banco para " + fallaServicioCounter +  " registros.");
+            }
+            
         }
 
-        private static async void InsertNewRecords(ServiceLD ldService)
+        private static async void InsertNewRecords(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
         {
             LDRecordForInsert record = new LDRecordForInsert();
             DataTable nifs = DataBaseManager.GetNIFSFromInsertSourceTable();
-
+            int fallaServicioCounter = 0;
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
 
@@ -84,9 +91,14 @@ namespace LegajoDigitalApp.Business
                 }
                 else
                 {
-                    throw new Exception("Falla en servicio de Legajo Digital del Banco");
+                    fallaServicioCounter++;
                 }
 
+
+            }
+            if (fallaServicioCounter > 0)
+            {
+                log.LogInformation("Error en servicio de banco para " + fallaServicioCounter + " registros.");
             }
         }
     }
