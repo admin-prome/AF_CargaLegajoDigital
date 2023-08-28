@@ -111,7 +111,7 @@ namespace LegajoDigitalDemoApp.DAL
                 using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     connection.Open();
-                    SqlCommand Cmd = new SqlCommand("Update_LD_Tabla_Destino", connection);
+                    SqlCommand Cmd = new SqlCommand("UpdateNif", connection);
                     Cmd.CommandType = CommandType.StoredProcedure;
 
                     Cmd.CommandType = CommandType.StoredProcedure;
