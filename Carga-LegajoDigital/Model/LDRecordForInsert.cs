@@ -21,7 +21,7 @@ namespace LegajoDigitalApp.Model
 
 
 
-        internal LDRecordForInsert AdjuntarDatosDeRegistro(LDServiceResponse result, string nif)
+        internal LDRecordForInsert AdjuntarDatosDeRegistro(LDServiceResponse result, Int64 nif)
         {
             this.NIF = nif;
             this.apiDavoServiceResponse.bp730 = result.bp730;
@@ -34,7 +34,7 @@ namespace LegajoDigitalApp.Model
             return this;
         }
 
-        public string NIF { get; set; }
+        public Int64 NIF { get; set; }
 
         public string fechaConsulta { get; set; }
 

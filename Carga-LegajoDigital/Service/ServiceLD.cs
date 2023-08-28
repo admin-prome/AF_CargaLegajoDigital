@@ -19,12 +19,12 @@ namespace LegajoDigitalDemoApp.Service
             this.baseUrl = ConfigurationManager.AppSettings["urlServicioBancoLegajoDigital"];
         }
 
-        public async Task<ServiceResponse> GetResponseFromService(string nif)
+        public async Task<ServiceResponse> GetResponseFromService(Int64 nif)
         {
             try
             {
-               
-                HttpResponseMessage ApiResponse = await client.GetAsync(this.baseUrl + nif);
+                string nifString = nif.ToString();
+                HttpResponseMessage ApiResponse = await client.GetAsync(this.baseUrl + nifString);
                 ApiResponse.EnsureSuccessStatusCode();
                 string responseBody = await ApiResponse.Content.ReadAsStringAsync();
                 LDServiceResponse ApiPokemonResponse = JsonConvert.DeserializeObject<LDServiceResponse>(responseBody);

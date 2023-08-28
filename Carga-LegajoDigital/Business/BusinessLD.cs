@@ -50,10 +50,10 @@ namespace LegajoDigitalApp.Business
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
                 
-                string nif = nifs.Rows[i].Field<string>(0);
+                Int64 nif = nifs.Rows[i].Field<Int64>(0);
 
                 ServiceResponse result = await ldService.GetResponseFromService(nif);
-                 //Busco registro en Tabla Destino y actualizo
+                 
                 if (result.IsSuccess)
                 {
                     LDRecordForInsert record= new LDRecordForInsert();
@@ -81,7 +81,7 @@ namespace LegajoDigitalApp.Business
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
 
-                string nif = nifs.Rows[i].Field<Int64>(0).ToString();
+                Int64 nif = nifs.Rows[i].Field<Int64>(0);
 
                 ServiceResponse result = await ldService.GetResponseFromService(nif);
                 if (result.IsSuccess)

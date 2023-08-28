@@ -125,7 +125,6 @@ namespace LegajoDigitalDemoApp.DAL
                     Cmd.Parameters.Add("@fecha_consulta", SqlDbType.VarChar, 10).Value = recordForInsert.fechaConsulta;
                     Cmd.Parameters.Add("@cuil", SqlDbType.VarChar, 10).Value = recordForInsert.apiDavoServiceResponse.cuil;
                     Cmd.ExecuteNonQuery();
-
                     
                 }
             }
