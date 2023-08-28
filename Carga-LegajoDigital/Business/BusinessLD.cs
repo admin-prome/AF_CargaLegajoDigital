@@ -26,25 +26,13 @@ namespace LegajoDigitalApp.Business
 
         private static void UpdateRecordsState()
         {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
-                {
-                    connection.Open();
-                    SqlCommand cmd = new SqlCommand("UpdateLDRecordsState", connection);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("An error occurred while calling the UpdateLDRecordsState stored procedure: " + e.Message);
-            }
+            DataBaseManager.UpdateRecordsState();
 
         }
 
         private static async void UpdateRecords(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
         {
+            DataBaseManager.UpdateRecordsState();
             DataTable nifs = DataBaseManager.GetNIFSFromUpdateSourceTable();
             int fallaServicioCounter = 0;
             for (int i = 0; i < nifs.Rows.Count; i++)

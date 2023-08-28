@@ -16,9 +16,16 @@ namespace Carga_LegajoDigital
             try
             {
                 /**/
+                log.LogTrace("Trace Agus");
+                log.LogError("hola");
+                log.LogWarning("asjdkflajsdklfjsadklfjk");
+                log.LogCritical("hola");
+                log.LogError(Environment.GetEnvironmentVariable("urlServicioBancoLegajoDigital"));
                 log.LogInformation("Entrando");
+                /*
                 ServiceLD LDService = new ServiceLD();
                 BusinessLD.ExecuteProccess(LDService,log);
+                */
                 log.LogInformation("Se ejecutó correctamente");
 
             }

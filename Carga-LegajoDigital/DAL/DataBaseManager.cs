@@ -107,6 +107,7 @@ namespace LegajoDigitalDemoApp.DAL
 
         internal static void UpdateRecord(LDRecordForInsert recordForInsert)
         {
+            Console.WriteLine("Actualizando "+recordForInsert.NIF);
             try
             {
                 using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
@@ -133,6 +134,24 @@ namespace LegajoDigitalDemoApp.DAL
                 throw new Exception("An error occurred while calling the UpdateNif stored procedure: " + e.Message);
             }
 
+        }
+
+        internal static void UpdateRecordsState()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
+                {
+                    connection.Open();
+                    SqlCommand cmd = new SqlCommand("UpdateLDRecordsState", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while calling the UpdateLDRecordsState stored procedure: " + e.Message);
+            }
         }
     }
 }
