@@ -37,6 +37,7 @@ namespace LegajoDigitalDemoApp.DAL
                     connection.Open();
                     SqlCommand Cmd = new SqlCommand("GetNewNifs", connection);
                     Cmd.CommandType = CommandType.StoredProcedure;
+                    Cmd.CommandTimeout = 240;
                     DbDataReader rdr = Cmd.ExecuteReader();
                     records.Load(rdr);
                 }
