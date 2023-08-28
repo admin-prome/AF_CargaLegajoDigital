@@ -11,21 +11,16 @@ namespace Carga_LegajoDigital
     public class LoadFunction
     {
         [FunctionName("LoadFunction")]
-        public void Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
+        public void Run([TimerTrigger("0 38 17 * * *")]TimerInfo myTimer, ILogger log)
         {
             try
             {
                 /**/
-                log.LogTrace("Trace Agus");
-                log.LogError("hola");
-                log.LogWarning("asjdkflajsdklfjsadklfjk");
-                log.LogCritical("hola");
-                log.LogError(Environment.GetEnvironmentVariable("urlServicioBancoLegajoDigital"));
-                log.LogInformation("Entrando");
-                /*
+                log.LogInformation("Entrando a Azure Function");
+                
                 ServiceLD LDService = new ServiceLD();
                 BusinessLD.ExecuteProccess(LDService,log);
-                */
+                
                 log.LogInformation("Se ejecutó correctamente");
 
             }
