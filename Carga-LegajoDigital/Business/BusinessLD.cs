@@ -37,7 +37,7 @@ namespace LegajoDigitalApp.Business
             int fallaServicioCounter = 0;
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
-                
+                log.LogInformation("Actualizando " + i);   
                 Int64 nif = nifs.Rows[i].Field<Int64>(0);
 
                 ServiceResponse result = await ldService.GetResponseFromService(nif);
