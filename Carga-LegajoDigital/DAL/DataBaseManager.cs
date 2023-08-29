@@ -32,6 +32,7 @@ namespace LegajoDigitalDemoApp.DAL
             try 
             {
                 var records = new DataTable();
+                
                 using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     connection.Open();
