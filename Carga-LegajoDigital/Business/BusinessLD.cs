@@ -63,12 +63,13 @@ namespace LegajoDigitalApp.Business
 
         private static async void InsertNewRecords(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
         {
+            log.LogInformation("Entrando a Insert New Records");
             LDRecordForInsert record = new LDRecordForInsert();
             DataTable nifs = DataBaseManager.GetNIFSFromInsertSourceTable();
             int fallaServicioCounter = 0;
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
-
+                log.LogInformation("Procesando " + i);
                 Int64 nif = nifs.Rows[i].Field<Int64>(0);
 
                 ServiceResponse result = await ldService.GetResponseFromService(nif);

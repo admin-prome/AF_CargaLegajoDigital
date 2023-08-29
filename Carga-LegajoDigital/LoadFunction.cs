@@ -3,6 +3,7 @@ using LegajoDigitalApp.Business;
 using LegajoDigitalApp.Model;
 using LegajoDigitalDemoApp.Service;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +12,7 @@ namespace Carga_LegajoDigital
     public class LoadFunction
     {
         [FunctionName("LoadFunction")]
-        public void Run([TimerTrigger("0 00 13 * * *")]TimerInfo myTimer, ILogger log)
+        public void Run([HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] TimerInfo myTimer, ILogger log)
         {
             try
             {
