@@ -14,6 +14,7 @@ namespace LegajoDigitalDemoApp.DAL
 {
     internal class DataBaseManager
     {
+        
         public DataBaseManager() 
         {
         }

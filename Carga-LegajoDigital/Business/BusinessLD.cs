@@ -16,16 +16,14 @@ namespace LegajoDigitalApp.Business
 {
     internal class BusinessLD
     {
-        internal async static void ExecuteProccess(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log, string message)
+        internal async static void ExecuteProccess(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
         {
 
             InsertNewRecords(ldService, log);
-            message += "Pasó el InsertNewRecords" + "\n";
             UpdateRecords(ldService,log);
-            message += "Pasó el UpdateRecords" + "\n";
             UpdateRecordsState();
-            message += "Pasó el UpdateStateRecords" + "\n";
-            throw new Exception(message);
+       
+          
         }
 
         private static void UpdateRecordsState()
@@ -70,6 +68,7 @@ namespace LegajoDigitalApp.Business
             log.LogInformation("Entrando a Insert New Records");
             LDRecordForInsert record = new LDRecordForInsert();
             DataTable nifs = DataBaseManager.GetNIFSFromInsertSourceTable();
+            log.LogInformation("Salió del SP al 216");
             int fallaServicioCounter = 0;
             for (int i = 0; i < nifs.Rows.Count; i++)
             {
@@ -84,7 +83,7 @@ namespace LegajoDigitalApp.Business
                 }
                 else
                 {
-                    throw new Exception("Falla en respuesta de servicio de banco");
+                    log.LogInformation("Error en servicio de banco para registros.");
                 }
 
 

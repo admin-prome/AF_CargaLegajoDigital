@@ -20,23 +20,14 @@ namespace Carga_LegajoDigital
         {
             try
             {
-                string message = String.Empty;
-                /**/
-                try 
-                {
-                    log.LogInformation("Entrando a Azure Function");
-
-                    ServiceLD LDService = new ServiceLD();
-                    BusinessLD.ExecuteProccess(LDService, log,message);
-
-                    log.LogInformation("Se ejecutó correctamente");
-                }
-                catch (Exception ex) 
-                {
-                  message= ex.Message;
-                }
-           
-                return new OkObjectResult("Se ejecutó correctamente: " + message);
+               
+                log.LogInformation("Entrando a Azure Function");
+                
+                ServiceLD LDService = new ServiceLD();
+                BusinessLD.ExecuteProccess(LDService,log);
+                
+                log.LogInformation("Se ejecutó correctamente");
+                return new OkObjectResult("Se ejecutó correctamente");
 
             }
             catch (Exception e)
