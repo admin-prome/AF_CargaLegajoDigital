@@ -16,12 +16,16 @@ namespace LegajoDigitalApp.Business
 {
     internal class BusinessLD
     {
-        internal async static void ExecuteProccess(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
+        internal async static void ExecuteProccess(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log, string message)
         {
-           
-            InsertNewRecords(ldService,log);
+
+            InsertNewRecords(ldService, log);
+            message += "Pasó el InsertNewRecords" + "\n";
             UpdateRecords(ldService,log);
+            message += "Pasó el UpdateRecords" + "\n";
             UpdateRecordsState();
+            message += "Pasó el UpdateStateRecords" + "\n";
+            throw new Exception(message);
         }
 
         private static void UpdateRecordsState()
@@ -80,7 +84,7 @@ namespace LegajoDigitalApp.Business
                 }
                 else
                 {
-                    fallaServicioCounter++;
+                    throw new Exception("Falla en respuesta de servicio de banco");
                 }
 
 
