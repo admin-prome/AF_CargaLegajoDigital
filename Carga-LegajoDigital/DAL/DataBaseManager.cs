@@ -1,6 +1,7 @@
 ﻿using LegajoDigitalApp.Model;
 //using LegajoDigitalDemoApp.Log;
 using LegajoDigitalDemoApp.Model;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -20,29 +21,33 @@ namespace LegajoDigitalDemoApp.DAL
         }
 
 
-        internal static DataTable GetNIFSFromInsertSourceTable()
+        internal static DataTable GetNIFSFromInsertSourceTable(Microsoft.Extensions.Logging.ILogger log)
         {
-            
-            DataTable records = ExecuteSourceSP();
+            log.LogInformation("Entrando al GetNifsFrom...");
+            DataTable records = ExecuteSourceSP(log);
             return records;
         }
 
-        private static DataTable ExecuteSourceSP()
+        private static DataTable ExecuteSourceSP(ILogger log)
         {
             
             try 
             {
                 var records = new DataTable();
-                
+                log.LogInformation("SP");
                 using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
+                    log.LogInformation("Connection Open?"); 
                     connection.Open();
+                    log.LogInformation("Connection Open");
                     SqlCommand Cmd = new SqlCommand("GetNewNifs", connection);
                     Cmd.CommandType = CommandType.StoredProcedure;
                     Cmd.CommandTimeout = 240;
                     DbDataReader rdr = Cmd.ExecuteReader();
+                    log.LogInformation("Execute Reader");
                     records.Load(rdr);
                 }
+                log.LogInformation("Saliendo");
                 return records;
 
             }

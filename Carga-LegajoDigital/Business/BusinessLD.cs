@@ -67,7 +67,7 @@ namespace LegajoDigitalApp.Business
         {
             log.LogInformation("Entrando a Insert New Records");
             LDRecordForInsert record = new LDRecordForInsert();
-            DataTable nifs = DataBaseManager.GetNIFSFromInsertSourceTable();
+            DataTable nifs = DataBaseManager.GetNIFSFromInsertSourceTable(log);
             log.LogInformation("Salió del SP al 216");
             int fallaServicioCounter = 0;
             for (int i = 0; i < nifs.Rows.Count; i++)
