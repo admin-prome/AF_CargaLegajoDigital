@@ -16,7 +16,7 @@ namespace LegajoDigitalDemoApp.Service
         public ServiceLD()
         {
             this.client = new HttpClient();
-            this.baseUrl = ConfigurationManager.AppSettings["urlServicioBancoLegajoDigital"];
+            this.baseUrl = Environment.GetEnvironmentVariable("urlServicioBancoLegajoDigital");
         }
 
         public async Task<ServiceResponse> GetResponseFromService(Int64 nif)
