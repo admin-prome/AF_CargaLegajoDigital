@@ -53,6 +53,7 @@ namespace LegajoDigitalDemoApp.DAL
             }
             catch(Exception e) 
             {
+                log.LogInformation($"{e.Message}"); 
                 throw new Exception("Hubo un error en el StoredProcedure de GetNif "+e.Message);
             }
         }
