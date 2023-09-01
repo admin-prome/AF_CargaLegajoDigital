@@ -38,9 +38,9 @@ namespace LegajoDigitalDemoApp.DAL
                 using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("216")))
                 {
                     log.LogInformation("Connection Open?");
-                    log.LogInformation("connstring"+Environment.GetEnvironmentVariable("216"));
+                    log.LogInformation("connstring: "+Environment.GetEnvironmentVariable("216"));
                     int timeout = connection.ConnectionTimeout;
-                    log.LogInformation("Connection Timeout" + timeout);
+                    log.LogInformation("Connection Timeout " + timeout);
                     connection.Open();
                     log.LogInformation("Connection Open");
                     SqlCommand Cmd = new SqlCommand("GetNewNifs", connection);

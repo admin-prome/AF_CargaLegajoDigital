@@ -93,5 +93,23 @@ namespace LegajoDigitalApp.Business
                 log.LogInformation("Error en servicio de banco para " + fallaServicioCounter + " registros.");
             }
         }
+
+        internal static void ConnectToProvMicroSQL(Microsoft.Extensions.Logging.ILogger log)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Environment.GetEnvironmentVariable("provmicrosql02")))
+                {
+                    connection.Open();
+
+                    log.LogInformation("Conexión hecha");
+                    log.LogInformation(connection.State.ToString());
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while calling the UpdateLDRecordsState stored procedure: " + e.Message);
+            }
+        }
     }
 }

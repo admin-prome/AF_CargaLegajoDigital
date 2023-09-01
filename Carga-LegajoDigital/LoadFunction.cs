@@ -22,7 +22,7 @@ namespace Carga_LegajoDigital
             {
                
                 log.LogInformation("Entrando a Azure Function");
-                
+                BusinessLD.ConnectToProvMicroSQL(log);
                 ServiceLD LDService = new ServiceLD();
                 BusinessLD.ExecuteProccess(LDService,log);
                 
