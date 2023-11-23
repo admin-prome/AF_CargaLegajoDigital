@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CargaLegajoDigital": {
+      "commandName": "Project",
+      "environmentVariables": {
+      }
+    }
+  }
+}
