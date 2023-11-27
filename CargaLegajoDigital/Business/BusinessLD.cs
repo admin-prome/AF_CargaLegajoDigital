@@ -19,10 +19,10 @@ namespace LegajoDigitalApp.Business
             this.configuration = configuration;
         }
 
-        internal async void ExecuteProccess(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
+        internal async void ExecuteProccess(ServiceLD ldService)
         {
-            await InsertNewRecords(ldService, log);
-            await UpdateRecords(ldService, log);
+            await InsertNewRecords(ldService);
+            await UpdateRecords(ldService);
             UpdateRecordsState();
         }
 
@@ -32,7 +32,7 @@ namespace LegajoDigitalApp.Business
             dataBaseManager.UpdateRecordsState();
         }
 
-        private async Task UpdateRecords(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
+        private async Task UpdateRecords(ServiceLD ldService)
         {
             DataBaseManager dataBaseManager = new DataBaseManager(configuration);
             dataBaseManager.UpdateRecordsState();
@@ -64,12 +64,12 @@ namespace LegajoDigitalApp.Business
             }
         }
 
-        private async Task InsertNewRecords(ServiceLD ldService, Microsoft.Extensions.Logging.ILogger log)
+        private async Task InsertNewRecords(ServiceLD ldService)
         {
             Console.WriteLine("Entrando a Insert New Records");
             LDRecordForInsert record = new LDRecordForInsert();
             DataBaseManager dataBaseManager = new DataBaseManager(configuration);
-            DataTable nifs = dataBaseManager.GetNIFSFromInsertSourceTable(log);
+            DataTable nifs = dataBaseManager.GetNIFSFromInsertSourceTable();
             Console.WriteLine("Salió del SP al 216");
             int fallaServicioCounter = 0;
 
@@ -97,7 +97,7 @@ namespace LegajoDigitalApp.Business
             }
         }
 
-        internal void ConnectToProvMicroSQL(Microsoft.Extensions.Logging.ILogger log)
+        internal void ConnectToProvMicroSQL()
         {
             try
             {

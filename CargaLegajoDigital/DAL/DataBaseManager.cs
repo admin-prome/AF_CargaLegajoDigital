@@ -18,14 +18,14 @@ namespace LegajoDigitalDemoApp.DAL
             this.configuration = configuration;
         }
 
-        internal DataTable GetNIFSFromInsertSourceTable(Microsoft.Extensions.Logging.ILogger log)
+        internal DataTable GetNIFSFromInsertSourceTable()
         {
             Console.WriteLine("Entrando al GetNifsFrom...");
-            DataTable records = ExecuteSourceSP(log);
+            DataTable records = ExecuteSourceSP();
             return records;
         }
 
-        private DataTable ExecuteSourceSP(ILogger log)
+        private DataTable ExecuteSourceSP()
         {
             try
             {
@@ -34,7 +34,6 @@ namespace LegajoDigitalDemoApp.DAL
                 using (SqlConnection connection = new SqlConnection(configuration["DataWarehouse-1"]))
                 {
                     Console.WriteLine("Connection Open?");
-                    Console.WriteLine("connstring: " + configuration["DataWarehouse-1"]);
                     int timeout = connection.ConnectionTimeout;
                     Console.WriteLine("Connection Timeout " + timeout);
                     connection.Open();

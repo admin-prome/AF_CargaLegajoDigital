@@ -2,7 +2,6 @@
 using LegajoDigitalApp.Business;
 using LegajoDigitalDemoApp.Service;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,73 +10,60 @@ using System.Threading.Tasks;
 
 namespace CargaLegajoDigital
 {
-    public class Program
+    class Program
     {
-        public static async Task Main(string[] args)
+        static async Task Main(string[] args)
         {
-            using IHost host = CreateHostBuilder(args).Build();
-            await host.RunAsync();
-        }
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-     Host.CreateDefaultBuilder(args).UseWindowsService()
-         .ConfigureServices((hostContext, services) =>
-         {
-             var keyVaultEndpoint = new Uri("https://tecnokeys.vault.azure.net/");
-             services.AddAzureKeyVaultConfiguration(keyVaultEndpoint);
-             services.AddHostedService<LoadService>();
-         });
+            try
+            {
+                Console.WriteLine("Starting Legajo Digital Console Application");
+                IConfiguration configuration = GetKeyVaultConfiguration();
+                Task backgroundTask = ExecuteAsync(configuration);
+                Console.WriteLine("Press any key to stop the application.");
+                Console.ReadKey();
+                await backgroundTask;
 
-    }
-    public static class ServiceCollectionExtensions
-    {
-        public static void AddAzureKeyVaultConfiguration(this IServiceCollection services, Uri keyVaultEndpoint)
+                Console.WriteLine("Legajo Digital Console Application completed successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        static IConfiguration GetKeyVaultConfiguration()
         {
             try
             {
                 Console.WriteLine("Creating Azure Key Vault configuration...");
 
+                var keyVaultEndpoint = new Uri("https://tecnokeys.vault.azure.net/");
                 var configurationBuilder = new ConfigurationBuilder()
-                    .AddAzureKeyVault(
-                        keyVaultEndpoint,
-                        new DefaultAzureCredential());
+                    .AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
                 var configuration = configurationBuilder.Build();
 
                 Console.WriteLine("Azure Key Vault configuration created.");
 
-                services.AddSingleton<IConfiguration>(configuration);
+                return configuration;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating Azure Key Vault configuration: {ex.Message}");
-                throw; 
+                throw;
             }
         }
-    }
 
-    public class LoadService : BackgroundService
-    {
-        private readonly ILogger<LoadService> log;
-        private readonly IConfiguration configuration;
-
-        public LoadService(ILogger<LoadService> logger, IConfiguration configuration)
-        {
-            log = logger;
-            this.configuration = configuration;
-        }
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        static async Task ExecuteAsync(IConfiguration configuration)
         {
             try
             {
-                Console.WriteLine("Entering Windows Service");
-
+                Console.WriteLine("Entering ExecuteAsync");
                 BusinessLD business = new BusinessLD(configuration);
-                business.ConnectToProvMicroSQL(log);
+                business.ConnectToProvMicroSQL();
                 ServiceLD LDService = new ServiceLD(configuration);
-                business.ExecuteProccess(LDService, log);
-
-                Console.WriteLine("Execution succeeded");
+                business.ExecuteProccess(LDService);
+                Console.WriteLine("Execution completed");
             }
             catch (Exception e)
             {
@@ -86,4 +72,3 @@ namespace CargaLegajoDigital
         }
     }
 }
-
