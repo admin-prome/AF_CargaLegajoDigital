@@ -1,4 +1,5 @@
-﻿using LegajoDigitalApp.Model;
+﻿using CargaLegajoDigital.Helper;
+using LegajoDigitalApp.Model;
 using LegajoDigitalDemoApp.DAL;
 using LegajoDigitalDemoApp.Model;
 using LegajoDigitalDemoApp.Service;
@@ -21,9 +22,10 @@ namespace LegajoDigitalApp.Business
 
         internal async void ExecuteProccess(ServiceLD ldService)
         {
-            await InsertNewRecords(ldService);
-            await UpdateRecords(ldService);
-            UpdateRecordsState();
+           await InsertNewRecords(ldService);
+           await UpdateRecords(ldService);
+           UpdateRecordsState();
+           ExportData();
         }
 
         private void UpdateRecordsState()
@@ -113,5 +115,24 @@ namespace LegajoDigitalApp.Business
                 throw new Exception("An error occurred while calling the UpdateLDRecordsState stored procedure: " + e.Message);
             }
         }
+        internal void ExportData()
+        {
+            try
+            {
+                DataBaseManager dataBaseManager = new DataBaseManager(configuration);
+                DataTable records = dataBaseManager.GetTableData();
+
+                string filePath = "C:\\Users\\Colaborador\\Downloads\\output.txt";
+                TableExportHelper exportHelper = new TableExportHelper();
+                exportHelper.ExportTableToTxt(records, filePath);
+
+                Console.WriteLine("Table data exported successfully to: " + filePath);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error exporting table data: " + e.Message);
+            }
+        }
+
     }
 }

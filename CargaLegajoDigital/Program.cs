@@ -19,7 +19,6 @@ namespace CargaLegajoDigital
                 Console.WriteLine("Starting Legajo Digital Console Application");
                 IConfiguration configuration = GetKeyVaultConfiguration();
                 Task backgroundTask = ExecuteAsync(configuration);
-                Console.WriteLine("Press any key to stop the application.");
                 Console.ReadKey();
                 await backgroundTask;
 

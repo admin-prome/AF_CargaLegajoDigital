@@ -151,5 +151,32 @@ namespace LegajoDigitalDemoApp.DAL
                 throw new Exception("An error occurred while calling the UpdateLDRecordsState stored procedure: " + e.Message);
             }
         }
+
+        internal DataTable GetTableData()
+        {
+            DataTable dataTable = new DataTable();
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(configuration["DataWarehouse-1"]))
+                {
+                    connection.Open();
+                    string selectQuery = "SELECT * FROM LD_TABLA_DESTINO"; 
+                    SqlCommand selectCmd = new SqlCommand(selectQuery, connection);
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(selectCmd))
+                    {
+                        adapter.Fill(dataTable);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error retrieving table data: " + e.Message);
+            }
+
+            return dataTable;
+        }
+
+
     }
 }
