@@ -20,7 +20,6 @@ namespace CargaLegajoDigital
                 configuration = GetConfiguration();
                 IConfiguration keyVaultConfiguration = GetKeyVaultConfiguration(configuration);
                 Task backgroundTask = ExecuteAsync(keyVaultConfiguration);
-                Console.ReadKey();
                 await backgroundTask;
 
                 Console.WriteLine("Legajo Digital Console Application completed successfully");

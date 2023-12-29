@@ -105,7 +105,7 @@ namespace LegajoDigitalApp.Business
                 DataBaseManager dataBaseManager = new DataBaseManager(configuration);
                 DataTable records = dataBaseManager.GetTableData();
                 string blobContainerName = "tablalegajodigital";
-                string blobName = $"LegajoDigital_{DateTime.Now:yyyyMMdd}";
+                string blobName = $"LegajoDigital_{DateTime.Now:yyyyMMddHHmm}";
                 string blobConnectionString = configuration["BlobConnectionLegajoDigital"];
                 StorageHelper exportHelper = new StorageHelper(blobConnectionString,blobContainerName);
                 exportHelper.UploadTableDataToBlob(records, blobName);
