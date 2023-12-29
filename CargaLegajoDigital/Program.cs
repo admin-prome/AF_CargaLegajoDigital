@@ -2,23 +2,24 @@
 using LegajoDigitalApp.Business;
 using LegajoDigitalDemoApp.Service;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Threading;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace CargaLegajoDigital
 {
     class Program
     {
+        private static IConfiguration configuration;
+
         static async Task Main(string[] args)
         {
             try
             {
                 Console.WriteLine("Starting Legajo Digital Console Application");
-                IConfiguration configuration = GetKeyVaultConfiguration();
-                Task backgroundTask = ExecuteAsync(configuration);
+                configuration = GetConfiguration();
+                IConfiguration keyVaultConfiguration = GetKeyVaultConfiguration(configuration);
+                Task backgroundTask = ExecuteAsync(keyVaultConfiguration);
                 Console.ReadKey();
                 await backgroundTask;
 
@@ -30,21 +31,48 @@ namespace CargaLegajoDigital
             }
         }
 
-        static IConfiguration GetKeyVaultConfiguration()
+        static IConfiguration GetConfiguration()
+        {
+            try
+            {
+                Console.WriteLine("Loading configuration...");
+
+                IConfiguration localConfiguration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+
+                Console.WriteLine("Configuration loaded.");
+
+                return localConfiguration;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading configuration: {ex.Message}");
+                throw;
+            }
+        }
+
+        static IConfiguration GetKeyVaultConfiguration(IConfiguration localConfiguration)
         {
             try
             {
                 Console.WriteLine("Creating Azure Key Vault configuration...");
 
                 var keyVaultEndpoint = new Uri("https://tecnokeys.vault.azure.net/");
+                string tenantId = localConfiguration["ServicePrincipal:tenantId"];
+                string clientId = localConfiguration["ServicePrincipal:clientId"];
+                string clientSecret = localConfiguration["ServicePrincipal:clientSecret"];
+                var client = new ClientSecretCredential(tenantId, clientId, clientSecret);
                 var configurationBuilder = new ConfigurationBuilder()
-                    .AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-
-                var configuration = configurationBuilder.Build();
+                    .AddConfiguration(localConfiguration) 
+                    .AddAzureKeyVault(keyVaultEndpoint, client);
+                var configurationKeyVault = configurationBuilder.Build();
 
                 Console.WriteLine("Azure Key Vault configuration created.");
 
-                return configuration;
+                return configurationKeyVault;
             }
             catch (Exception ex)
             {
@@ -59,7 +87,6 @@ namespace CargaLegajoDigital
             {
                 Console.WriteLine("Entering ExecuteAsync");
                 BusinessLD business = new BusinessLD(configuration);
-                business.ConnectToProvMicroSQL();
                 ServiceLD LDService = new ServiceLD(configuration);
                 business.ExecuteProccess(LDService);
                 Console.WriteLine("Execution completed");

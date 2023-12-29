@@ -98,35 +98,19 @@ namespace LegajoDigitalApp.Business
                 Console.WriteLine("Error en servicio de banco para " + fallaServicioCounter + " registros.");
             }
         }
-
-        internal void ConnectToProvMicroSQL()
-        {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(configuration["DW2-ProvMicroDesa"]))
-                {
-                    connection.Open();
-                    Console.WriteLine("Conexión hecha");
-                    Console.WriteLine(connection.State.ToString());
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("An error occurred while calling the UpdateLDRecordsState stored procedure: " + e.Message);
-            }
-        }
         internal void ExportData()
         {
             try
             {
                 DataBaseManager dataBaseManager = new DataBaseManager(configuration);
                 DataTable records = dataBaseManager.GetTableData();
+                string blobContainerName = "tablalegajodigital";
+                string blobName = $"LegajoDigital_{DateTime.Now:yyyyMMdd}";
+                string blobConnectionString = configuration["BlobConnectionLegajoDigital"];
+                StorageHelper exportHelper = new StorageHelper(blobConnectionString,blobContainerName);
+                exportHelper.UploadTableDataToBlob(records, blobName);
 
-                string filePath = "C:\\Users\\Colaborador\\Downloads\\output.txt";
-                TableExportHelper exportHelper = new TableExportHelper();
-                exportHelper.ExportTableToTxt(records, filePath);
-
-                Console.WriteLine("Table data exported successfully to: " + filePath);
+                Console.WriteLine("Table data exported successfully");
             }
             catch (Exception e)
             {
