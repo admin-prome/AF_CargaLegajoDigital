@@ -2,9 +2,6 @@
 using LegajoDigitalApp.Business;
 using LegajoDigitalDemoApp.Service;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace CargaLegajoDigital
 {
@@ -12,7 +9,7 @@ namespace CargaLegajoDigital
     {
         private static IConfiguration configuration;
 
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             try
             {
@@ -20,8 +17,7 @@ namespace CargaLegajoDigital
                 configuration = GetConfiguration();
                 IConfiguration keyVaultConfiguration = GetKeyVaultConfiguration(configuration);
                 Task backgroundTask = ExecuteAsync(keyVaultConfiguration);
-                await backgroundTask;
-
+                backgroundTask.Wait();
                 Console.WriteLine("Legajo Digital Console Application completed successfully");
             }
             catch (Exception ex)
@@ -87,8 +83,9 @@ namespace CargaLegajoDigital
                 Console.WriteLine("Entering ExecuteAsync");
                 BusinessLD business = new BusinessLD(configuration);
                 ServiceLD LDService = new ServiceLD(configuration);
-                business.ExecuteProccess(LDService);
+                await business.ExecuteProccess(LDService);
                 Console.WriteLine("Execution completed");
+
             }
             catch (Exception e)
             {

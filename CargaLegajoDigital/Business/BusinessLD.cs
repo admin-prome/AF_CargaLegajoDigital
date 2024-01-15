@@ -20,7 +20,7 @@ namespace LegajoDigitalApp.Business
             this.configuration = configuration;
         }
 
-        internal async void ExecuteProccess(ServiceLD ldService)
+        internal async Task ExecuteProccess(ServiceLD ldService)
         {
            await InsertNewRecords(ldService);
            await UpdateRecords(ldService);
