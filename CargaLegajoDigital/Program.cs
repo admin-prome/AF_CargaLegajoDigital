@@ -56,11 +56,14 @@ namespace CargaLegajoDigital
             {
                 Console.WriteLine("Loading configuration...");
 
+                string exeDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+
                 IConfiguration localConfiguration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .SetBasePath(exeDirectory)
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                     .AddEnvironmentVariables()
                     .Build();
+
 
                 Console.WriteLine("Configuration loaded.");
 
