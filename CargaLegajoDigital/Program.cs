@@ -2,6 +2,7 @@
 using LegajoDigitalApp.Business;
 using LegajoDigitalDemoApp.Service;
 using Microsoft.Extensions.Configuration;
+using System.Reflection;
 
 namespace CargaLegajoDigital
 {
@@ -15,6 +16,8 @@ namespace CargaLegajoDigital
             {
                 Console.WriteLine("Starting Legajo Digital Console Application");
                 configuration = GetConfiguration();
+                string logFilePath = GetLogFilePath();
+                RedirectConsoleOutputToFile(logFilePath);
                 IConfiguration keyVaultConfiguration = GetKeyVaultConfiguration(configuration);
                 Task backgroundTask = ExecuteAsync(keyVaultConfiguration);
                 backgroundTask.Wait();
@@ -23,6 +26,27 @@ namespace CargaLegajoDigital
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+        static string GetLogFilePath()
+        {
+            string exeDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string logFileName = $"console_output_{DateTime.Now:yyyyMMdd_HHmmss}.log";
+            return Path.Combine(exeDirectory, logFileName);
+        }
+
+        static void RedirectConsoleOutputToFile(string logFilePath)
+        {
+            try
+            {
+                var fileStream = new FileStream(logFilePath, FileMode.Append, FileAccess.Write);
+                var streamWriter = new StreamWriter(fileStream);
+                streamWriter.AutoFlush = true;
+                Console.SetOut(streamWriter);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error redirecting console output to file: {ex.Message}");
             }
         }
 
