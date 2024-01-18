@@ -31,8 +31,14 @@ namespace CargaLegajoDigital
         static string GetLogFilePath()
         {
             string exeDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string logFolder = Path.Combine(exeDirectory, "Log");
+
+            if (!Directory.Exists(logFolder))
+            {
+                Directory.CreateDirectory(logFolder);
+            }
             string logFileName = $"console_output_{DateTime.Now:yyyyMMdd_HHmmss}.log";
-            return Path.Combine(exeDirectory, logFileName);
+            return Path.Combine(logFolder, logFileName);
         }
 
         static void RedirectConsoleOutputToFile(string logFilePath)
