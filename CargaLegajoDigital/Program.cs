@@ -2,7 +2,9 @@
 using LegajoDigitalApp.Business;
 using LegajoDigitalDemoApp.Service;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System.Reflection;
+using System.Text;
 
 namespace CargaLegajoDigital
 {
@@ -16,9 +18,9 @@ namespace CargaLegajoDigital
             {
                 Console.WriteLine("Starting Legajo Digital Console Application");
                 configuration = GetConfiguration();
+                IConfiguration keyVaultConfiguration = GetKeyVaultConfiguration(configuration);
                 string logFilePath = GetLogFilePath();
                 RedirectConsoleOutputToFile(logFilePath);
-                IConfiguration keyVaultConfiguration = GetKeyVaultConfiguration(configuration);
                 Task backgroundTask = ExecuteAsync(keyVaultConfiguration);
                 backgroundTask.Wait();
                 Console.WriteLine("Legajo Digital Console Application completed successfully");
@@ -26,6 +28,45 @@ namespace CargaLegajoDigital
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+                SendFailureNotification(ex);
+            }
+        }
+
+        private static void SendFailureNotification(Exception ex)
+        {
+            try
+            {
+                string apiUrl = configuration["FailureNotification:ApiEndpoint"];
+                string idApp = configuration["FailureNotification:idApp"];
+
+                var payload = new
+                {
+                    idApp = idApp,
+                    errorMessage = ex.Message
+                };
+
+                string jsonPayload = JsonConvert.SerializeObject(payload);
+                StringContent httpContent = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+                using (var httpClient = new HttpClient())
+                {
+                    // Send POST request to Azure Functions API
+                    var response = httpClient.PostAsync(apiUrl, httpContent).Result;
+
+                    // Check response status, log if needed
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine($"Error sending failure notification: {response.StatusCode} - {response.ReasonPhrase}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failure notification sent successfully");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error sending failure notification: {e.Message}");
             }
         }
         static string GetLogFilePath()
@@ -94,7 +135,7 @@ namespace CargaLegajoDigital
                 string clientSecret = localConfiguration["ServicePrincipal:clientSecret"];
                 var client = new ClientSecretCredential(tenantId, clientId, clientSecret);
                 var configurationBuilder = new ConfigurationBuilder()
-                    .AddConfiguration(localConfiguration) 
+                    .AddConfiguration(localConfiguration)
                     .AddAzureKeyVault(keyVaultEndpoint, client);
                 var configurationKeyVault = configurationBuilder.Build();
 
@@ -123,6 +164,7 @@ namespace CargaLegajoDigital
             catch (Exception e)
             {
                 Console.WriteLine($"Legajo Digital process failed: {DateTime.Now} {e.Message}");
+                throw;
             }
         }
     }
