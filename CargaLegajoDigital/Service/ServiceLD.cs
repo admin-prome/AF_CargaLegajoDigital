@@ -12,36 +12,45 @@ namespace LegajoDigitalDemoApp.Service
 {
     internal class ServiceLD
     {
-        private HttpClient client;
-        private string baseUrl;
+        private readonly HttpClient httpClient;
+        private readonly string baseUrl;
         private readonly IConfiguration configuration;
+        private readonly int maxRetryAttempts = 3;
+        private readonly int delayMs = 1000;
 
-        public ServiceLD(IConfiguration configuration)
+        public ServiceLD(HttpClient httpClient, IConfiguration configuration)
         {
-            this.client = new HttpClient();
+            this.httpClient = httpClient;
             this.configuration = configuration;
             this.baseUrl = configuration["urlServicioBancoLegajoDigital"];
         }
 
         public async Task<ServiceResponse> GetResponseFromService(Int64 nif)
         {
-            try
+            for (int attempt = 0; attempt < maxRetryAttempts; attempt++)
             {
-                string nifString = nif.ToString();
-                HttpResponseMessage ApiResponse = await client.GetAsync(this.baseUrl + nifString);
-                ApiResponse.EnsureSuccessStatusCode();
-                string responseBody = await ApiResponse.Content.ReadAsStringAsync();
-                LDServiceResponse ApiPokemonResponse = JsonConvert.DeserializeObject<LDServiceResponse>(responseBody);
-                ServiceResponse serviceResponse = GenerateResponse(ApiPokemonResponse);
-                return serviceResponse;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-              
+                try
+                {
+                    string nifString = nif.ToString();
+                    HttpResponseMessage ApiResponse = await httpClient.GetAsync(this.baseUrl + nifString);
+                    ApiResponse.EnsureSuccessStatusCode();
+                    string responseBody = await ApiResponse.Content.ReadAsStringAsync();
+                    LDServiceResponse ApiPokemonResponse = JsonConvert.DeserializeObject<LDServiceResponse>(responseBody);
+                    ServiceResponse serviceResponse = GenerateResponse(ApiPokemonResponse);
+                    return serviceResponse;
+                }
+                catch (HttpRequestException ex) when (attempt < maxRetryAttempts - 1)
+                {
+                    Console.WriteLine($"Error occurred: {ex.Message}. Retrying...");
+                    await Task.Delay(delayMs);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Max retry attempts reached: {ex.Message}");
+                }
             }
 
-
+            throw new Exception("Max retry attempts reached without success.");
         }
 
         private ServiceResponse GenerateBadResponse(string message)

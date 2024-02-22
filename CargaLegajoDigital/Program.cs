@@ -2,7 +2,9 @@
 using LegajoDigitalApp.Business;
 using LegajoDigitalDemoApp.Service;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System;
 using System.Reflection;
 using System.Text;
 
@@ -21,7 +23,11 @@ namespace CargaLegajoDigital
                 IConfiguration keyVaultConfiguration = GetKeyVaultConfiguration(configuration);
                 string logFilePath = GetLogFilePath();
                 RedirectConsoleOutputToFile(logFilePath);
-                Task backgroundTask = ExecuteAsync(keyVaultConfiguration);
+                var services = new ServiceCollection();
+                services.AddScoped<ServiceLD>(provider => new ServiceLD(provider.GetRequiredService<HttpClient>(), keyVaultConfiguration));
+                services.AddScoped<HttpClient>();
+                var serviceProvider = services.BuildServiceProvider();
+                Task backgroundTask = ExecuteAsync(keyVaultConfiguration, serviceProvider);
                 backgroundTask.Wait();
                 Console.WriteLine("Legajo Digital Console Application completed successfully");
             }
@@ -150,13 +156,13 @@ namespace CargaLegajoDigital
             }
         }
 
-        static async Task ExecuteAsync(IConfiguration configuration)
+        static async Task ExecuteAsync(IConfiguration configuration, IServiceProvider serviceProvider)
         {
             try
             {
                 Console.WriteLine("Entering ExecuteAsync");
                 BusinessLD business = new BusinessLD(configuration);
-                ServiceLD LDService = new ServiceLD(configuration);
+                ServiceLD LDService = serviceProvider.GetRequiredService<ServiceLD>();
                 await business.ExecuteProccess(LDService);
                 Console.WriteLine("Execution completed");
 
